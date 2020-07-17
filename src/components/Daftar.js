@@ -1,24 +1,58 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom'
+import axios from 'axios';
 
 const Daftar = ()=> {
 
-    const[nama, setNama] = useState('')
-    const[email, setEmail] = useState('')
-    const[password, setPassword] = useState('')
+    const[nama, setNama] = useState('');
+    const[email, setEmail] = useState('');
+    const[password, setPassword] = useState('');
+    const[alert, setAlert] = useState('');
+    const[error, setError] = useState('');
 
     const ChangeNama = (e)=>{
         const value = e.target.value;
         setNama(value);
+        setError('');
     };
     const ChangeEmail = (e)=> {
         const value = e.target.value;
         setEmail(value);
+        setError('');
     };
     const ChangePassword = (e)=> {
         const value = e.target.value;
         setPassword(value);
+        setError('');
     };
+    const ClickDaftar = () =>{
+        const data = {
+            nama: nama,
+            email: email,
+            password: password
+        };
+        // console.log(data);
+        axios.post('http://localhost:3001/Daftar', data)
+        .then( (result) => {
+            if (result){
+                if (result.data){
+                    setNama('')
+                    setEmail('')
+                    setPassword('')
+                    setError('');
+                    setAlert(result.data.message)
+                    setTimeout( ()=>{
+                        setAlert('')
+                    }, 3000) 
+                }
+            }
+            // console.log(result.data)
+        })
+        .catch( (err) => {
+            setError(err.response.data.message)
+            // console.log('error', err.response.data.message);
+        })
+    }
 
     return(
         <div style={{marginTop: "150px"}}>
@@ -30,7 +64,20 @@ const Daftar = ()=> {
                                 <div>
                                     <h2>Form pendaftaran</h2>
                                 </div>
-
+                                {
+                                    error && (
+                                        <div className="alert alert-warning">
+                                            <p>{error}</p>
+                                        </div>
+                                    )
+                                }
+                                {
+                                    alert && (
+                                        <div className="alert alert-primary">
+                                            <p>{alert}</p>
+                                        </div>
+                                    )
+                                }
                                 <div className="form-group">
                                     <label>Nama</label>
                                     <input type="nama" placeholder="Nama" className="form-control" value={nama} onChange={ChangeNama} />
@@ -47,7 +94,7 @@ const Daftar = ()=> {
                                 </div>
                                 <div className="row">
                                     <div className="col-md-6">
-                                        <button className="btn btn-primary">Daftar!</button>
+                                        <button className="btn btn-primary" onClick={ClickDaftar}>Daftar!</button>
                                     </div>
                                     <div className="col-md-6 text-right">
                                         <Link to="/" className="btn btn-warning">

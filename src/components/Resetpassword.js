@@ -28,9 +28,10 @@ const Resetpassword = (props) => {
             setErrCPW('')
         }
     }
-    const SimpanPW = function () {
+    const SimpanPW = function (props) {
         const data = {
             password: password,
+            confirmpassword: confirmpassword,
             token: props.match.params.token
         }
         // console.log(props.match.params.token);

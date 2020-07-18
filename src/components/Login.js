@@ -78,6 +78,11 @@ const Login = () => {
                                             </Link>
                                         </div>
                                     </div>
+                                    <div className="mt-3">
+                                        <Link to="/lupa-password" className="small">
+                                            Lupa password
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>
